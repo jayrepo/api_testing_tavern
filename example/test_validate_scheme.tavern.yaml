@@ -45,14 +45,12 @@ stages:
                         max-ex: 2018
                     color:
                       type: str
-                      # using regexp to match hex color code
-                      # {6} not working
-                      pattern: '^#[A-Fa-f0-9]+$'
+                      # using regexp to match hex color code, {{n}} to escape
+                      pattern: '^#[A-Fa-f0-9]{{6,7}}$'
                     pantone_value:
                       type: str
                       # using regexp
-                      # {} not working
-                      pattern: '\d\d-\d\d\d\d'
+                      pattern: '^\d{{2}}-\d{{4}}$'
 
   - name: Add a new car entry
     request:

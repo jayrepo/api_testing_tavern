@@ -9,7 +9,7 @@ stages:
     response:
       status_code: 200
       body:
-        data: null
+        data: !anything
       save:
         # both car_name and end_year are saved
         $ext:

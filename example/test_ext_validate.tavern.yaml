@@ -16,6 +16,3 @@ stages:
         # Need to export project folder to PYTHONPATH
         $ext:
           function: testutils.utils:verify_name
-
-
-

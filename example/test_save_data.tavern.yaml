@@ -55,7 +55,7 @@ stages:
       body:
         data: null
         # using previous saved data
-        # Type mismatch: https://github.com/taverntesting/tavern/pull/50
-        total_pages: "{last_page}"
+        # Type mismatch: convert str to int
+        total_pages: !int "{last_page}"
         # ...with optional type code 
-        page: "{last_page:n}"
+        page: !int "{last_page:n}"
