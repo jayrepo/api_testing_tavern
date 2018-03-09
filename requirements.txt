@@ -1,0 +1,4 @@
+tavern
+pytest
+pytest-html
+pytest-xdist

@@ -1,0 +1,21 @@
+
+test_name: Using external function for validation
+
+stages:
+  - name: Verify first name not include number
+
+    request:
+      url: https://reqres.in/api/users/1
+      method: GET
+    response:
+      status_code: 200
+      body:
+        data: null
+        # Verify the response by using external function:
+        # <PATH_TO_MODULE>:<FUNCTION_NAME>
+        # Need to export project folder to PYTHONPATH
+        $ext:
+          function: testutils.utils:verify_name
+
+
+

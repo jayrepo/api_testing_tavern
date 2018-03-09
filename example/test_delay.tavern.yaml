@@ -1,0 +1,26 @@
+
+test_name: Using anchor to reuse fragment
+
+stages:
+  # Wait a certain amout of time for the task to complete
+  - name: create new car entry
+    request:
+      url: https://reqres.in/api/cars
+      method: POST
+      data:
+        name: "Tesla"
+        model: "Roadster"
+        price: 200000
+        year: 2015
+        
+    response:
+      status_code: 201
+    delay_after: 2
+
+  - name: get all cars
+    delay_before: 2
+    request:
+      url: https://reqres.in/api/cars
+      method: GET
+    response:
+      status_code: 200

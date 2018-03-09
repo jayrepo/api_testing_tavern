@@ -1,0 +1,32 @@
+
+test_name: Using external function for saving data
+
+stages:
+  - name: Get name and year + 5 for new car's year
+    request:
+      url: https://reqres.in/api/cars/1
+      method: GET
+    response:
+      status_code: 200
+      body:
+        data: null
+      save:
+        # both car_name and end_year are saved
+        $ext:
+          function: testutils.utils:get_date
+        body:
+          car_name: data.name
+
+  - name: create newcars entry
+    request:
+      url: https://reqres.in/api/newcars
+      method: POST
+      data:
+        name: "{car_name}"
+        year: "{end_year}"
+    response:
+      status_code: 201
+      body:
+        id: null
+        createdAt: null
+  

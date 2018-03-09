@@ -1,0 +1,61 @@
+
+test_name: Save data for later use
+
+stages:
+  - name: Login and save token
+
+    request:
+      url: https://reqres.in/api/login
+      method: POST
+      data:
+        email: test@example.com
+        password: guess
+    response:
+      # Verify status code
+      status_code: 200
+      # Verify content-type is json
+      headers:
+        content-type: application/json; charset=utf-8
+      body:
+        # Using `null` if you just need to make sure that a value is returned
+        # ...but you don’t know (or care) what it is
+        token: null
+      # save the total_pages for later use
+      save:
+        body:
+          jwt_token: token
+
+  - name: Get total pages number
+
+    request:
+      url: https://reqres.in/api/users
+      method: GET
+      headers:
+        # Using previous saved token
+        token: "{jwt_token}"
+    response:
+      status_code: 200
+      # save the total_pages for later use
+      save:
+        body:
+          last_page: total_pages
+
+  - name: Go to the last page
+
+    request:
+      # url: https://reqres.in/api/users?page={last_page}
+      url: https://reqres.in/api/users
+      method: GET
+      params:
+        page: "{last_page}"
+      headers:
+        token: "{jwt_token}"
+    response:
+      status_code: 200
+      body:
+        data: null
+        # using previous saved data
+        # Type mismatch: https://github.com/taverntesting/tavern/pull/50
+        total_pages: "{last_page}"
+        # ...with optional type code 
+        page: "{last_page:n}"

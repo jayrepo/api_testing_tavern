@@ -1,0 +1,20 @@
+
+test_name: Using request variables
+
+stages:
+  - name: create new car entry
+
+    request:
+      url: https://reqres.in/api/cars
+      method: POST
+      json:
+        name: "Tesla"
+        year: "2017"
+    response:
+      status_code: 201
+      body:
+        id: null
+        createdAt: null
+        # using request json data
+        name: "{tavern.request_vars.json.name}"
+        year: "{tavern.request_vars.json.year}"

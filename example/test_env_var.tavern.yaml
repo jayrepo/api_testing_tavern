@@ -1,0 +1,21 @@
+
+test_name: Using environment variables
+
+stages:
+  - name: Login
+
+    request:
+      # Using env var for url, passing corresponding url for different server
+      # e.g. qa.example.com, staging.example.com
+      # url: https://reqres.in/api/login
+      url: "{tavern.env_vars.TEST_URL}/api/login"
+      method: POST
+      data:
+        # Using env vars for sensitive data which cannot be shipped with code
+        # e.g. password, token, private key
+        username: "{tavern.env_vars.TEST_UID}"
+        password: "{tavern.env_vars.TEST_PWD}"
+    response:
+      status_code: 200
+      body:
+        token: null

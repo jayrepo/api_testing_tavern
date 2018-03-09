@@ -1,0 +1,29 @@
+
+test_name: Using anchor to reuse fragment
+
+stages:
+  # create a car entry
+  - &test_case
+    name: create new car entry
+    request: &test_case_request
+      url: https://reqres.in/api/cars
+      method: POST
+      data: &test_case_request_data
+        name: "Tesla"
+        model: "Roadster"
+        price: 200000
+        year: 2015
+        
+    response:
+      status_code: 201
+      body:
+        id: null
+        createdAt: null
+  # create a new one for new year
+  - <<: *test_case
+    name: create new car entry 2016
+    request:
+      <<: *test_case_request
+      data:
+        <<: *test_case_request_data
+        year: 2016

@@ -1,0 +1,90 @@
+
+test_name: Validating schema and data binding
+
+stages:
+  - name: Get car info
+    request:
+      url: https://reqres.in/api/cars/1
+      method: GET
+    response:
+      status_code: 200
+      body:
+        # {
+        #   "data":{  
+        #     "id":1,
+        #     "name":"cerulean",
+        #     "year":2000,
+        #     "color":"#98B2D1",
+        #     "pantone_value":"15-4020"
+        #   }
+        # }
+        $ext:
+          # http://pykwalify.readthedocs.io/en/master/
+          function: tavern.testutils.helpers:validate_pykwalify
+          extra_kwargs:
+            schema:
+              type: map
+              required: True
+              mapping:
+                data:
+                  type: map
+                  required: True
+                  mapping:
+                    id:
+                      type: int
+                      required: True
+                    optionalkey:
+                      type: str
+                    name:
+                      type: str
+                    year:
+                      type: int
+                      # using range, 2000=<year < 2018
+                      range:
+                        min: 2000
+                        max-ex: 2018
+                    color:
+                      type: str
+                      # using regexp to match hex color code
+                      # {6} not working
+                      pattern: '^#[A-Fa-f0-9]+$'
+                    pantone_value:
+                      type: str
+                      # using regexp
+                      # {} not working
+                      pattern: '\d\d-\d\d\d\d'
+
+  - name: Add a new car entry
+    request:
+      url: https://reqres.in/api/cars
+      method: POST
+      data:
+        name: "Tesla"
+        year: '2015-06'
+    response:
+      status_code: 201
+      body:
+        # {
+        #   "name": "Tesla",
+        #   "year": "2015-06",
+        #   "id": "589",
+        #   "createdAt": "2018-03-09T05:45:27.913Z"
+        # }
+        $ext:
+          # http://pykwalify.readthedocs.io/en/master/
+          function: tavern.testutils.helpers:validate_pykwalify
+          extra_kwargs:
+            schema:
+              type: map
+              required: True
+              mapping:
+                name:
+                  type: str
+                year:
+                  type: date
+                  # format for date or datetime
+                  format: "%Y-%m"
+                id:
+                  type: str
+                createdAt:
+                  type: timestamp
